@@ -26,7 +26,7 @@
               <br />
               </div>
               <script>
-                  document.getElementById('body').innerHTML="the adasdsadas";
+                  document.getElementById('body').innerHTML={{$blog->content }};
               </script>
               @endforeach
               <!-- Pager -->
