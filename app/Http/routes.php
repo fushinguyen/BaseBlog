@@ -7,7 +7,7 @@ Route::get('/ko', function () {
 
 /**index**/
 Route::get('/', function () {
-    return view('home');
+    return view('blog.detail');
 });
 
 Route::get('home',function(){
@@ -24,27 +24,28 @@ Route::get('/auth/register',function(){
 });
 
 /**blog**/
-Route::controller('/blogs','BlogController');
-
-Route::get('/blog',function(){
-  return view('blog.index');
-});
-
-Route::get('/blog/create',function(){
-  return view('blog.create');
-});
-
-Route::get('/blog/delete',function(){
-  return view('blog.delete');
-});
-
-Route::get('/blog/edit',function(){
-  return view('blog.edit');
-});
-
-Route::get('/blog/detail',function(){
-  return view('blog.detail');
-});
+Route::resource('blogs','BlogsController');
+// Route::controller('/blogs','BlogController');
+//
+// Route::get('/blog',function(){
+//   return view('blog.index');
+// });
+//
+// Route::get('/blog/create',function(){
+//   return view('blog.create');
+// });
+//
+// Route::get('/blog/delete',function(){
+//   return view('blog.delete');
+// });
+//
+// Route::get('/blog/edit',function(){
+//   return view('blog.edit');
+// });
+//
+// Route::get('/blog/detail',function(){
+//   return view('blog.detail');
+// });
 
 /**Author**/
 Route::resource('about','AboutController');
