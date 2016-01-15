@@ -12,7 +12,7 @@
             </h1>
 
             <h2>
-                <a href="#">title</a>
+                <a href="#">{{ $article->title }}</a>
             </h2>
             <p class="lead">
                 by <a href="{{ url('home')}}">Start Bootstrap</a>

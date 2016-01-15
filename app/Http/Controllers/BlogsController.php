@@ -7,46 +7,61 @@ use Illuminate\Pagination\Paginator;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\models\Blog;
+use App\models\BlogPost;
 
 class BlogsController extends Controller
 {
-    public function index()
+    public function getIndex()
     {
-        // $blog = Blog::all();
-        $blogs = \DB::table('blog_posts')->simplePaginate(1);
+        $blogs = BlogPost::simplePaginate(1);
+        // $blogs = \DB::table('blog_posts')->simplePaginate(10);
         return view('home')->with('blogs', $blogs);
     }
 
-    public function create()
+    // public function postIndex()
+    // {
+    //     $blogs = BlogPost::simplePaginate(10);
+    //     // $blogs = \DB::table('blog_posts')->simplePaginate(10);
+    //     return view('home')->with('blogs', $blogs);
+    // }
+
+    public function getCreate()
     {
-        //
+        return view('blog.create');
+    }
+    public function postCreate()
+    {
+        $title =  \Input::get('title', '');
+        return $title;
     }
 
-    public function store(Request $request)
+    // public function store(Request $request)
+    // {
+    //     //
+    // }
+    //
+    public function getShow($id)
     {
-        //
+        // $id = \Input::get('id', 0);
+        $article = BlogPost::find($id);
+        if(is_null($article)) return '404 not found';
+        return view('blog.detail')->with('article', $article);
     }
-
-    public function show($id)
-    {
-        //
-    }
-
-
-    public function edit($id)
-    {
-        //
-    }
-
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    public function destroy($id)
-    {
-        //
-    }
+    //
+    //
+    // public function edit($id)
+    // {
+    //     //
+    // }
+    //
+    //
+    // public function update(Request $request, $id)
+    // {
+    //     //
+    // }
+    //
+    // public function destroy($id)
+    // {
+    //     //
+    // }
 }

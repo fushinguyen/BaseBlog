@@ -24,7 +24,7 @@ Route::get('/auth/register',function(){
 });
 
 /**blog**/
-Route::resource('blogs','BlogsController');
+Route::controller('blogs','BlogsController');
 // Route::controller('/blogs','BlogController');
 //
 // Route::get('/blog',function(){

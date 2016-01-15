@@ -1,6 +1,7 @@
 @extends('layouts.base')
 
 @section('content')
+
 <div class="container">
 
     <div class="row">
@@ -8,26 +9,24 @@
         <!-- Blog Entries Column -->
         <div class="col-md-8">
 
-            <h1 class="page-header">
-                Tuổi trẻ blog
-            </h1>
+            <h1 class="page-header">Tuổi trẻ blog</h1>
 
               @foreach($blogs as $blog)
-              <h2>
-                  <a href="#">{{ $blog->title }}</a>
-              </h2>
+                <?php
+                $intro = explode("<hr />", $blog->content,2);
+                 ?>
+              <h2><a href="{{ url('blogs/show/'.$blog->id) }}">{{ $blog->title }}</a></h2>
               <p class="lead">
                   by <a href="{{ url('home')}}">Start Bootstrap</a>
               </p>
               <p><span class="glyphicon glyphicon-time"></span> Posted on {{ $blog->created_at }}</p>
               <hr>
               <div class="the-article-body" id="body">
-                <!-- {{$blog->content }} -->
-              <br />
+                <?php
+                  echo $intro[0];
+                 ?>
+                <br />
               </div>
-              <script>
-                  document.getElementById('body').innerHTML={{$blog->content }};
-              </script>
               @endforeach
               <!-- Pager -->
               <ul class="pager">
@@ -39,8 +38,9 @@
                   </li>
               </ul>
               <hr/>
+        </div> <!--div col-md-8-->
+      </div> <!--div row-->
 
-            </div>
 
         <!-- Blog Sidebar Widgets Column -->
         <div class="col-md-4">
@@ -89,7 +89,7 @@
                         </ul>
                     </div>
                     <!-- /.col-lg-6 -->
-                </div>
+              </div>
                 <!-- /.row -->
             </div>
 
@@ -103,5 +103,5 @@
 
     </div>
     <!-- /.row -->
-</div>
+
 @endsection

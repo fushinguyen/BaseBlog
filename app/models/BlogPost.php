@@ -4,7 +4,7 @@ namespace App\models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class blog extends Model
+class BlogPost extends Model
 {
     protected $fillable = [
       'user_id',
