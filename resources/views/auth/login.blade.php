@@ -3,7 +3,8 @@
 @section('content')
 <div class="container">
 
-  <form class="form-signin" >
+  <form class="form-signin" role="form" method="POST" action="{{ url('/auth/login') }}">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <h2 class="form-signin-heading">Đăng nhập</h2>
     <label for="inputEmail" class="sr-only">Email</label>
     <input type="email" id="inputEmail" class="form-control" placeholder="Địa chỉ email" required autofocus>

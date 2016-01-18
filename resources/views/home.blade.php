@@ -15,18 +15,18 @@
                 <?php
                 $intro = explode("<hr />", $blog->content,2);
                  ?>
-              <h2><a href="{{ url('blogs/show/'.$blog->id) }}">{{ $blog->title }}</a></h2>
-              <p class="lead">
-                  by <a href="{{ url('home')}}">Start Bootstrap</a>
-              </p>
-              <p><span class="glyphicon glyphicon-time"></span> Posted on {{ $blog->created_at }}</p>
-              <hr>
-              <div class="the-article-body" id="body">
+                <h2><a href="{{ url('blogs/show/'.$blog->id) }}">{{ $blog->title }}</a></h2>
+                <p class="lead">
+                    by <a href="{{ url('home')}}">Start Bootstrap</a>
+                </p>
+                <p><span class="glyphicon glyphicon-time"></span> Posted on {{ $blog->created_at }}</p>
+                <hr>
+                <div class="the-article-body" id="body">
                 <?php
                   echo $intro[0];
                  ?>
                 <br />
-              </div>
+                </div>
               @endforeach
               <!-- Pager -->
               <ul class="pager">
@@ -39,8 +39,6 @@
               </ul>
               <hr/>
         </div> <!--div col-md-8-->
-      </div> <!--div row-->
-
 
         <!-- Blog Sidebar Widgets Column -->
         <div class="col-md-4">
@@ -103,5 +101,6 @@
 
     </div>
     <!-- /.row -->
+</div>
 
 @endsection

@@ -13,9 +13,13 @@ class BlogsController extends Controller
 {
     public function getIndex()
     {
-        $blogs = BlogPost::simplePaginate(1);
-        // $blogs = \DB::table('blog_posts')->simplePaginate(10);
-        return view('home')->with('blogs', $blogs);
+        $updated = strtotime("0000-00-00 00:00:00");
+        if(BlogPost::where('updated_at',$updated)->get()){
+            $blogsOrderby = BlogPost::orderBy('created_at','desc')->simplePaginate(2);
+        }else{
+            $blogsOrderby = BlogPost::orderBy('updated_at','desc')->simplePaginate(2);
+        }
+        return view('index')->with('blogsOrderby',$blogsOrderby);
     }
 
     // public function postIndex()
@@ -31,21 +35,38 @@ class BlogsController extends Controller
     }
     public function postCreate()
     {
-        $title =  \Input::get('title', '');
-        return $title;
+        $title =  \Input::get('title');
+        $content = \Input::get('content');
+        \DB::table('blog_posts')
+            ->insert([
+                'user_id'=>'4',
+                'title'=>$title,
+                'content'=>$content,
+                'image_url'=>'',
+                'is_private'=>'0'
+            ]);
+        return $content;
     }
 
-    // public function store(Request $request)
-    // {
-    //     //
-    // }
-    //
+     public function getDelete()
+     {
+         \DB::table('blog_posts')
+            ->insert([
+                'user_id'=>'4',
+                'title'=>'new blog',
+                'content'=>'new body blog',
+                'image_url'=>'',
+                'is_private'=>'0'
+            ]);
+         return view('blog.delete');
+     }
+
     public function getShow($id)
     {
         // $id = \Input::get('id', 0);
         $article = BlogPost::find($id);
         if(is_null($article)) return '404 not found';
-        return view('blog.detail')->with('article', $article);
+        return view('blog.detail')  ->with('article', $article);
     }
     //
     //

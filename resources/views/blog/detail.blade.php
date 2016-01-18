@@ -12,32 +12,23 @@
             </h1>
 
             <h2>
-                <a href="#">{{ $article->title }}</a>
+                <a href="{{ url('blogs/show/'. $article->id)}}">{{ $article->title }}</a>
             </h2>
             <p class="lead">
                 by <a href="{{ url('home')}}">Start Bootstrap</a>
             </p>
-            <p><span class="glyphicon glyphicon-time"></span> Posted on August 28, 2013 at 10:00 PM</p>
+            <p><span class="glyphicon glyphicon-time"></span> Ngày tạo: {{ $article->created_at }}</p>
             <hr>
             <hr>
 
             <div class="the-article-body">
-
+                <?php
+                echo $article->content;
+                ?>
             <br />
             </div>
 
             <hr>
-
-            <!-- Pager -->
-            <ul class="pager">
-                <li class="previous">
-                    <a href="#">&larr; Older</a>
-                </li>
-                <li class="next">
-                    <a href="#">Newer &rarr;</a>
-                </li>
-            </ul>
-
         </div>
 
         <!-- Blog Sidebar Widgets Column -->
