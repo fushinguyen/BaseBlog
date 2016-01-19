@@ -7,15 +7,18 @@
     <div class="row">
 
           <div class="col-md-8">
-                <h1 class="page-header">Tuoi tre blog</h1>
+                <h1 class="page-header">Tuổi Trẻ blog</h1>
                 @foreach($blogsOrderby as $blog)
                     <h2><a href="{{ url('blogs/show/'.$blog->id) }}">{{ $blog->title }}</a> </h2>
-                    <p><span class="glyphicon glyphicon-time"></span> Ngày tạo: {{ $blog->created_at }}</p>
+                    @if($blog->created_at > $blog->updated_at)
+                      <p>Được đăng bởi: {{ $blog->username }}  <span class="glyphicon glyphicon-time"></span> {{ $blog->created_at }}</p>
+                    @else
+                      <p>Được đăng bởi: {{ $blog->username }}  <span class="glyphicon glyphicon-time"></span> {{ $blog->updated_at }}</p>
+                    @endif
                     <div class="the-article-body" id="the-article-body">
                       <section>
                         <?php
                             echo explode("<hr />", $blog->content, 2)[0];
-//                            echo $blog->content;
                         ?>
                       </section>
                     </div>
@@ -52,14 +55,10 @@
                   <div class="row">
                       <div class="col-lg-6">
                           <ul class="list-unstyled">
-                              <li><a href="#">User Name</a>
-                              </li>
-                              <li><a href="#">User Name</a>
-                              </li>
-                              <li><a href="#">User Name</a>
-                              </li>
-                              <li><a href="#">User Name</a>
-                              </li>
+                            @foreach($userstbl as $usertbl)
+                            <li><a href="#">{{ $usertbl->username }}</a>
+                            </li>
+                            @endforeach
                           </ul>
                       </div>
                       <!-- /.col-lg-6 -->

@@ -20,7 +20,6 @@
                 <script>
                     CKEDITOR.replace( 'editor' );
                     $('#btnSubmit').click(function(){
-                        console.log('sub');
                         $.ajax({
                                     method: "POST",
                                     url: "{{ url('blogs/create') }}",
@@ -29,8 +28,8 @@
                                         content: CKEDITOR.instances.editor.getData()
                                     }
                                 })
-                                .done(function( data ) {
-                                    alert( data );
+                                .success(function( data ) {
+                                    
                                 });
                     });
                 </script>

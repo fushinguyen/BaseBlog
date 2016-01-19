@@ -8,11 +8,11 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="{{ url('home') }}">Tuổi trẻ blog</a>
+      <a class="navbar-brand" href="{{ url('/') }}">Tuổi trẻ blog</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="{{ url('home') }}">Trang chủ</a></li>
+        <li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
         <li><a href="#">Tiểu thuyết</a></li>
         <li><a href="#">Truyện ngắn</a></li>
         <li class="dropdown">
@@ -24,13 +24,20 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        @if (Auth::guest())
-          <li class="active"><a href="{{ url('/auth/login') }}">Đăng nhập</a></li>
-          <li class="active"><a href="{{ url('/auth/register') }}">Đăng ký</a></li>
+        @if (!Auth::check())
+          <li><a href="{{ url('/login') }}">Đăng nhập</a></li>
+          <li><a href="{{ url('/register') }}">Đăng ký</a></li>
         @else
-          <li class="active"><a href="{{ url('/blog/index') }}">Blog cá nhân</a></li>
-          <li class="active"><a href="{{ url('/blog/create') }}">Tạo blog mới</a></li>
-          <li class="active"><a href="{{ url('#') }}">Đăng xuất</a></li>
+          <li><a href="{{ url('/blogs/create') }}">Tạo blog mới</a></li>
+          <li class="dropdown">
+              <a href="{{ url('/index') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                  {{ Auth::user()->username }} <span class="caret"></span>
+              </a>
+
+              <ul class="dropdown-menu" role="menu">
+                  <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Đăng xuất</a></li>
+              </ul>
+          </li>
         @endif
       </ul>
     </div><!--/.nav-collapse -->

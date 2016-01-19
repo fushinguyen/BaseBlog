@@ -1,13 +1,10 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
-
-use App\User;
+use App\models\User;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-
 class AuthController extends Controller
 {
     /*
@@ -20,16 +17,13 @@ class AuthController extends Controller
     | a simple trait to add these behaviors. Why don't you explore it?
     |
     */
-
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
-
     /**
      * Where to redirect users after login / registration.
      *
      * @var string
      */
-    protected $redirectTo = '/';
-
+    protected $redirectTo = '/home';
     /**
      * Create a new authentication controller instance.
      *
@@ -39,7 +33,6 @@ class AuthController extends Controller
     {
         $this->middleware('guest', ['except' => 'logout']);
     }
-
     /**
      * Get a validator for an incoming registration request.
      *
@@ -54,7 +47,6 @@ class AuthController extends Controller
             'password' => 'required|confirmed|min:6',
         ]);
     }
-
     /**
      * Create a new user instance after a valid registration.
      *
@@ -64,7 +56,7 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'username' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);

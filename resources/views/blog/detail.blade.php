@@ -6,19 +6,14 @@
     <div class="row">
 
         <div class="col-md-8">
-
-            <h1 class="page-header">
-                Tuổi trẻ blog
-            </h1>
-
-            <h2>
+            <h1>
                 <a href="{{ url('blogs/show/'. $article->id)}}">{{ $article->title }}</a>
-            </h2>
-            <p class="lead">
-                by <a href="{{ url('home')}}">Start Bootstrap</a>
-            </p>
-            <p><span class="glyphicon glyphicon-time"></span> Ngày tạo: {{ $article->created_at }}</p>
-            <hr>
+            </h1>
+            @if($article->created_at > $article->updated_at)
+              <p>Được đăng bởi: <a href="{{ url('#')}}">{{ $author->username }}</a>  <span class="glyphicon glyphicon-time"></span> {{ $article->created_at }}</p>
+            @else
+              <p>Được đăng bởi: <a href="{{ url('#')}}">{{ $author->username }}</a>  <span class="glyphicon glyphicon-time"></span> {{ $article->updated_at }}</p>
+            @endif
             <hr>
 
             <div class="the-article-body">
