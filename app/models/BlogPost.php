@@ -13,4 +13,5 @@ class BlogPost extends Model
       'image_url',
       'is_private'
     ];
+    
 }

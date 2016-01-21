@@ -20,13 +20,20 @@ class AuthController extends Controller
 
       $user = \DB::table('users')->where('username', \Input::get('username'))
               ->first();
-
-      if ($pwd == $user->password) {
-        \Auth::loginUsingId($user->id);
-        return redirect ('/');
+      if (isset($user)) {
+          if ($pwd == $user->password) {
+            \Auth::loginUsingId($user->id);
+            return redirect ('/');
+          }else {
+            $errUP = "Mật khẩu không đúng, vui lòng nhập lại.";
+            return view('auth.login')->with("errUP",$errUP);
+          }
       }else {
-        return redirect ('/login');
+          $errUP = "Người dùng không tồn tại.";
+          return view('auth.login')->with("errUP",$errUP);
       }
+
+
   }
   public function getLogout () {
       Auth::logout();
@@ -34,12 +41,30 @@ class AuthController extends Controller
   }
 
   public function getRegister () {
-      // \DB::table('users')->insert([
-      //   'username'=>'abcde',
-      //   'email'=>'adbe@ab.com',
-      //   'password'=>md5('123456')
-      // ]);
-      return "Object is inserted";
+      if (\Auth::check()) {
+        return redirect('/');
+      }else {
+        return view('auth.register');
+      }
+  }
+
+  public function postRegister () {
+        $usrname = \Input::get('username');
+        $email = \Input::get('email');
+        $pwd = md5(\Input::get('pwd'));
+
+        \DB::table('users')->insert([
+                          'username'=> \Input::get('username'),
+                          'email'=> \Input::get('email'),
+                          'password'=> md5(\Input::get('pwd'))
+                        ]);
+
+        $user = \DB::table('users')->where('username', \Input::get('username'))
+                ->first();
+
+        \Auth::loginUsingId($user->id);
+
+        return redirect ('/');
   }
 
 }

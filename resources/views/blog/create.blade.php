@@ -18,7 +18,13 @@
 
                 <script src="{{ url('ckeditor/ckeditor.js') }}"></script>
                 <script>
-                    CKEDITOR.replace( 'editor' );
+                $('.ckeditor').each(function(index, el) {
+                      CKEDITOR.replace( this ,{
+                          filebrowserBrowseUrl : '../plugins/filemanager/filemanager/dialog.php?type=2&editor=ckeditor&fldr=&akey={{ config("app.key") }}',
+                          filebrowserUploadUrl : '../plugins/filemanager/filemanager/dialog.php?type=2&editor=ckeditor&fldr=&akey={{ config("app.key") }}',
+                          filebrowserImageBrowseUrl : '../plugins/filemanager/filemanager/dialog.php?type=1&editor=ckeditor&fldr=&akey={{ config("app.key") }}'
+                      });
+                  });
                     $('#btnSubmit').click(function(){
                         $.ajax({
                                     method: "POST",
@@ -29,7 +35,7 @@
                                     }
                                 })
                                 .success(function( data ) {
-                                    
+
                                 });
                     });
                 </script>

@@ -1,82 +1,71 @@
 @extends('layouts.base')
 
 @section('content')
+
 <div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
-                        {!! csrf_field() !!}
-
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Name</label>
-
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" name="name" value="{{ old('name') }}">
-
-                                @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input type="email" class="form-control" name="email" value="{{ old('email') }}">
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input type="password" class="form-control" name="password">
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Confirm Password</label>
-
-                            <div class="col-md-6">
-                                <input type="password" class="form-control" name="password_confirmation">
-
-                                @if ($errors->has('password_confirmation'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-user"></i>Register
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+  <h2 class="form-register-heading">Đăng ký tài khoản mới</h2>
+  <form class="form-register" id="edit-form" onsubmit="return false;">
+    <div class="form-group">
+      <label for="username">Tên người dùng:</label>
+      <input type="username" class="form-control" id="username" name="username" placeholder="Nhập tên người dùng" required>
     </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="Nhập địa chỉ email" required>
+    </div>
+    <div class="form-group">
+      <label for="pwd">Mật khẩu:</label>
+      <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Nhập mật khẩu" required>
+    </div>
+    <div class="form-group">
+      <label for="pwd">Nhập lại mật khẩu:</label>
+      <input type="password" class="form-control" id="re-pwd" name="re-pwd" placeholder="Nhập lại mật khẩu" required min='6'>
+    </div>
+    <div class="btn btn-lg btn-primary btn-block" id="btnSubmit">Đăng ký</div>
+  </form>
+  <script>
+  var validate = $('#edit-form').validate({
+      highlight: function (element) {
+          $(element).closest('.form-group').addClass('has-error');
+      },
+      unhighlight: function (element) {
+          $(element).closest('.form-group').removeClass('has-error');
+      },
+      errorElement: 'span',
+      errorClass: 'help-block',
+      errorPlacement: function (error, element) {
+          if (element.parent('.input-group').length) {
+              error.insertAfter(element.parent());
+          } else {
+              error.insertAfter(element);
+          }
+      }
+  });
+  $(document).ready(function(){
+    $('#edit-form input').change(function(){
+      $(this).valid();
+    });
+    $('#btnSubmit').click(function(){
+      if (!$('#edit-form').valid())
+              return false;
+        $.ajax({
+                    method: "POST",
+                    url: "{{ url('/register') }}",
+                    data: {
+                        username: $('#username').val(),
+                        email: $('#email').val(),
+                        pwd: $('#pwd').val()
+                    }
+                })
+                .success(function( data ) {
+                  alert('sucess');
+                })
+                .error(function() {
+                  alert('fail');
+                });
+    });
+  });
+
+  </script>
 </div>
 @endsection

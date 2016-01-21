@@ -10,6 +10,8 @@
     <link href="{{ url('css/footer.css') }}" rel="stylesheet">
     <link href="{{ url('css/signin.css') }}" rel="stylesheet">
     <script src="{{ url('js/jquery.min.js') }}"></script>
+    <script src="{{ url('js/jquery.validate.min.js') }}"></script>
+    <script src="{{ url('js/jquery.validate.vi.min.js') }}"></script>
     <script src="{{ url('js/bootstrap.min.js') }}"></script>
     <script src="{{ url('js/knockout.js') }}"></script>
     <script src="{{ url('js/fn.js') }}"></script>

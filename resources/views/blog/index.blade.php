@@ -8,6 +8,7 @@
 
           <div class="col-md-8">
                 <h1 class="page-header">Tuoi tre blog</h1>
+
                 @foreach($blogsOrderby as $blog)
                     <h2><a href="{{ url('blogs/show/'.$blog->id) }}">{{ $blog->title }}</a> </h2>
                     <p><span class="glyphicon glyphicon-time"></span> Ngày tạo: {{ $blog->created_at }}</p>
@@ -15,7 +16,6 @@
                       <section>
                         <?php
                             echo explode("<hr />", $blog->content, 2)[0];
-//                            echo $blog->content;
                         ?>
                       </section>
                     </div>

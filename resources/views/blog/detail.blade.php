@@ -6,14 +6,53 @@
     <div class="row">
 
         <div class="col-md-8">
-            <h1>
-                <a href="{{ url('blogs/show/'. $article->id)}}">{{ $article->title }}</a>
-            </h1>
-            @if($article->created_at > $article->updated_at)
-              <p>Được đăng bởi: <a href="{{ url('#')}}">{{ $author->username }}</a>  <span class="glyphicon glyphicon-time"></span> {{ $article->created_at }}</p>
-            @else
-              <p>Được đăng bởi: <a href="{{ url('#')}}">{{ $author->username }}</a>  <span class="glyphicon glyphicon-time"></span> {{ $article->updated_at }}</p>
-            @endif
+          <div class="row">
+            <div class="col-md-8">
+                    <h1>
+                        <a href="{{ url('blogs/show/'. $article->id)}}">{{ $article->title }}</a>
+                    </h1>
+                    @if($article->created_at > $article->updated_at)
+                      <p>Được đăng bởi: <a href="{{ url('#')}}">{{ $author->username }}</a>  <span class="glyphicon glyphicon-time"></span> {{ $article->created_at }}</p>
+                    @else
+                      <p>Được đăng bởi: <a href="{{ url('#')}}">{{ $author->username }}</a>  <span class="glyphicon glyphicon-time"></span> {{ $article->updated_at }}</p>
+                    @endif
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-2">
+              @if(\Auth::check() && (\Auth::user()->id == $article->user_id))
+                  <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                          {{ $article->is_private == 1? 'private':'public' }}
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+
+                            <li ><a onclick="changeMode({{ $article->is_private == 1? 0:1 }})">{{ $article->is_private == 1? 'public':'private' }}</a></li>
+
+                        </ul>
+
+                  </div>
+              @endif
+            </div>
+          </div>
+
+          <script>
+          function changeMode(mode){
+            $.ajax({
+                        method: "POST",
+                        url: "{{ url('blogs/change-mode/'. $article->id) }}",
+                        data: {
+                            mode: mode
+                        }
+                    })
+                    .success(function( data ) {
+                        alert('Updated success');
+                        window.location.reload();
+                    });
+          }
+
+          </script>
+
             <hr>
 
             <div class="the-article-body">
@@ -22,7 +61,6 @@
                 ?>
             <br />
             </div>
-
             <hr>
         </div>
 

@@ -5,6 +5,8 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::controller('blogs', 'BlogsController');
 
+    // Route::controller('manager', 'AboutController');
+
     Route::controller('/', 'AuthController');
 
     // Route::controller('/', 'BlogsController');
