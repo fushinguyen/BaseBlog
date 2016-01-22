@@ -14,27 +14,11 @@ class BlogsController extends Controller
 {
     public function getIndex()
     {
-      /**Blogs**/
-        $updated = strtotime("0000-00-00 00:00:00");
-        if(BlogPost::where('updated_at',$updated)->get()){
-            $blogsOrderby = BlogPost::orderBy('blog_posts.created_at','desc')
-                            ->leftJoin('users','users.id','=','blog_posts.user_id')
-                            ->select('blog_posts.*','users.username')
-                            ->where('is_private','=','0')
-                            ->simplePaginate(5);
-        }else{
-            $blogsOrderby = BlogPost::orderBy('blog_posts.updated_at','desc')
-                            ->leftJoin('users','users.id','=','blog_posts.user_id')
-                            ->select('blog_posts.*','users.username')
-                            ->where('is_private','=','0')
-                            ->simplePaginate(5);
-        }
       /**Users**/
-        $userstbl = \DB::table('users')->select('users.username')->get();
-
+        $userstbl = \DB::table('users')->select('users.*')->get();
 
         return view('index')->with([
-                            'blogsOrderby'=>$blogsOrderby,
+                            'blogsOrderby'=>BlogPost::getBlogsPublic(),
                             'userstbl'=>$userstbl
         ]);
     }
@@ -44,86 +28,84 @@ class BlogsController extends Controller
         if (\Auth::check()) {
           return view('blog.create');
         }else {
-          return "You must login to use this function.";
+          return "Bạn không có quyền truy cập chức năng này.";
         }
 
     }
     public function postCreate()
     {
-        $title =  \Input::get('title');
-        $content = \Input::get('content');
-        \DB::table('blog_posts')
-            ->insert([
-                'user_id'=>\Auth::user()->id,
-                'title'=>$title,
-                'content'=>$content,
-                'image_url'=>'',
-                'is_private'=>'0'
-            ]);
-        return $content;
+          return BlogPost::createBlog();
     }
 
 /**Hien thi danh sach bai viet cua 1 user cu the**/
     public function getStore($id)
     {
-      /**Blogs**/
-        $updated = strtotime("0000-00-00 00:00:00");
-        if(BlogPost::where('updated_at',$updated)->get()){
-            $article = BlogPost::orderBy('blog_posts.created_at','desc')
-                            ->leftJoin('users','users.id','=','blog_posts.user_id')
-                            ->select('blog_posts.*','users.username')
-                            ->where('user_id',$id)
-                            ->simplePaginate(5);
-        }else{
-            $article = BlogPost::orderBy('blog_posts.updated_at','desc')
-                            ->leftJoin('users','users.id','=','blog_posts.user_id')
-                            ->select('blog_posts.*','users.username')
-                            ->where('user_id',$id)
-                            ->simplePaginate(5);
-        }
-
-        if(is_null($article)) return '404 not found '. $id;
-        return view('blog.index')->with('blogsOrderby',$article);
+        if(is_null(BlogPost::showBlogsUser(5, $id))) return '404 not found '. $id;
+        $userstbl = \DB::table('users')->select('users.*')->get();
+        return view('blog.user.index')->with([
+                                      'blogsOrderby'=>BlogPost::showBlogsUser(5, $id),
+                                      'userstbl'=>$userstbl
+                                      ]);
     }
 
     public function getShow($id)
     {
         $article = BlogPost::find($id);
-        $author = BlogPost::leftJoin('users','users.id','=','blog_posts.user_id')
-                            ->select('blog_posts.*','users.username as username')
-                            ->where('blog_posts.id',$id)
-                            ->first();
+        $author = BlogPost::getAuthor($id);
+        $userstbl = \DB::table('users')->select('users.*')->get();
         if(is_null($article)) return '404 not found '. $id;
 
         if ($author->is_private == 1) {
+            if ($author->user_id == \Auth::user()->id) {
+              /**nguoi dung la chu nhan bai viet**/
+                return view('blog.detail')  ->with([
+                                'article'=>$article,
+                                'author'=>$author,
+                                'userstbl'=>$userstbl
+                  ]);
+            }else {
+              /**nguoi dung da dang nhap nhung xem bai nguoi khac o dang private**/
+              return "This blog is private.";
+            }
+        }else {
+          return view('blog.detail')  ->with([
+                          'article'=>$article,
+                          'author'=>$author,
+                          'userstbl'=>$userstbl
+            ]);
+        }
+    }
+
+    public static function getBlogdetail($id){
+      $article = BlogPost::find($id);
+      $author = BlogPost::getAuthor($id);
+      $userstbl = \DB::table('users')->select('users.*')->get();
+      if(is_null($article)) return '404 not found '. $id;
+
+      if ($author->is_private == 1) {
           if ($author->user_id == \Auth::user()->id) {
             /**nguoi dung la chu nhan bai viet**/
-              $mode = \Input::get('mode');
-              if (isset($mode)) {
-                $mode2 = ($mode == 'public') ? 0:1;
-                BlogPost::where('id',$id)
-                        ->update(['is_private'=>$mode2]);
-              }
-              return view('blog.detail')  ->with([
+              BlogPost::changeModeBlog($id);
+              return view('blog.user.detail')  ->with([
                               'article'=>$article,
-                              'author'=>$author
+                              'author'=>$author,
+                              'userstbl'=>$userstbl
                 ]);
           }else {
             /**nguoi dung da dang nhap nhung xem bai nguoi khac o dang private**/
             return "This blog is private.";
           }
 
-        }else {
-          return view('blog.detail')  ->with([
-                          'article'=>$article,
-                          'author'=>$author
-            ]);
-        }
+      }else {
+        return view('blog.user.detail')  ->with([
+                        'article'=>$article,
+                        'author'=>$author,
+                        'userstbl'=>$userstbl
+          ]);
+      }
     }
+
     public function postChangeMode($id){
-      $change = BlogPost::where('id',$id)
-                        ->update(['is_private'=>\Input::get('mode',0)]);
-
-
+      return BlogPost::changeModeBlog($id);
     }
 }

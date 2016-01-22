@@ -26,16 +26,23 @@
                       });
                   });
                     $('#btnSubmit').click(function(){
+                      var html = $.parseHTML( CKEDITOR.instances.editor.getData() );
+                      var url = "{{ url("/") }}";
                         $.ajax({
                                     method: "POST",
                                     url: "{{ url('blogs/create') }}",
                                     data: {
                                         title: $('#title').val(),
-                                        content: CKEDITOR.instances.editor.getData()
+                                        content: CKEDITOR.instances.editor.getData(),
+                                        img_src: $(html).attr("src")
                                     }
                                 })
                                 .success(function( data ) {
-
+                                    alert("Đăng bài viết thành công");
+                                    window.location.replace("{{ url("/") }}");
+                                }).error(function( data ) {
+                                    alert("Bài viết đã tồn tại (vui lòng thay thế một tiêu đề mới).");
+                                    window.location.replace("{{ url("/blogs/create") }}");
                                 });
                     });
                 </script>

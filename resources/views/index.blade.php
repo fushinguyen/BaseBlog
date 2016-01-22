@@ -9,19 +9,27 @@
           <div class="col-md-8">
                 <h1 class="page-header">Tuổi Trẻ blog</h1>
                 @foreach($blogsOrderby as $blog)
-                    <h2><a href="{{ url('blogs/show/'.$blog->id) }}">{{ $blog->title }}</a> </h2>
-                    @if($blog->created_at > $blog->updated_at)
-                      <p>Được đăng bởi: {{ $blog->username }}  <span class="glyphicon glyphicon-time"></span> {{ $blog->created_at }}</p>
-                    @else
-                      <p>Được đăng bởi: {{ $blog->username }}  <span class="glyphicon glyphicon-time"></span> {{ $blog->updated_at }}</p>
-                    @endif
-                    <div class="the-article-body" id="the-article-body">
-                      <section>
-                        <?php
-                            echo explode("<hr />", $blog->content, 2)[0];
-                        ?>
-                      </section>
-                    </div>
+                  <div class="the-article-body" id="the-article-body">
+                    <section>
+                      <div class="media">
+                            <div class="media-left">
+                                <a href="#"><div class="img-thumbnail img-intro" style="background-image: url({{ $blog->image_url }})">
+                                            </div></a>
+                            </div>
+                            <div class="media-body">
+                                <div class="media-heading">
+                                  <h2><a href="{{ url('blogs/show/'.$blog->id) }}">{{ $blog->title }}</a> </h2>
+                                  <p>Được đăng bởi: <a href="{{ url('blogs/store/'.$blog->user_id) }}">{{ $blog->username }}</a> <span class="glyphicon glyphicon-time"></span> Ngày tạo: {{ $blog->created_at }}</p>
+                                </div>
+
+                                <?php
+                                $intro = explode("<hr />", $blog->content, 2)[0];
+                                echo $intro;
+                                ?>
+                            </div>
+                      </div>
+                    </section>
+                  </div>
                 @endforeach
                         <!-- Pager -->
                   <ul class="pager">
@@ -56,23 +64,14 @@
                       <div class="col-lg-6">
                           <ul class="list-unstyled">
                             @foreach($userstbl as $usertbl)
-                            <li><a href="#">{{ $usertbl->username }}</a>
+                            <li><a href="{{ url('/blogs/store/'. $usertbl->id) }}">{{ $usertbl->username }}</a>
                             </li>
                             @endforeach
                           </ul>
                       </div>
                       <!-- /.col-lg-6 -->
                       <div class="col-lg-6">
-                          <ul class="list-unstyled">
-                              <li><a href="#">User Name</a>
-                              </li>
-                              <li><a href="#">User Name</a>
-                              </li>
-                              <li><a href="#">User Name</a>
-                              </li>
-                              <li><a href="#">User Name</a>
-                              </li>
-                          </ul>
+
                       </div>
                       <!-- /.col-lg-6 -->
                   </div>
